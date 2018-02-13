@@ -1,0 +1,23 @@
+{
+  "name": "pet-shop",
+  "version": "0.0.1",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stan M",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.3.0"
+  },
+  "dependencies": {
+    "chai": "^4.0.0-canary.2",
+    "npm-ls": "^1.0.0",
+    "purdy": "^3.0.2"
+  }
+}
