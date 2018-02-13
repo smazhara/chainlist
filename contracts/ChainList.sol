@@ -74,8 +74,6 @@ contract ChainList {
   }
 
   function buyArticle(uint _id) public payable {
-    return
-    require(false);
     require(articleCounter > 0);
 
     require(_id > 0 && _id <= articleCounter);

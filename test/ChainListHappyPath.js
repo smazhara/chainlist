@@ -4,14 +4,13 @@ const helpers = require('./helpers')
 
 contract('ChainList', async (accounts) => {
   let contract
-  let seller = accounts[1]
-  let buyer = accounts[2]
+
   let article = {
     name: 'Article 1',
     description: 'Description of Article 1',
     price: web3.toWei(1, 'szabo'),
-    seller: accounts[1],
-    buyer: accounts[2]
+    seller: accounts[0],
+    buyer: accounts[1]
   }
 
   function balance(account) {
@@ -32,14 +31,14 @@ contract('ChainList', async (accounts) => {
       article.name,
       article.description,
       article.price,
-      { from: seller }
+      { from: article.seller }
     )
 
     const articleCount = await contract.numberOfArticles()
 
-    assert.equal(articleCount, 1, 'article count must be 0')
+    assert.equal(articleCount, 1, 'article count must be 1')
 
-    helpers.assertArticle(articleCount, article)
+    await helpers.assertArticle(1, article)
   })
 
   it('triggers an event when a new article is sold', async () => {
@@ -60,7 +59,8 @@ contract('ChainList', async (accounts) => {
 
     assert.equal(events.length, 1, 'should have received one event')
 
-    assert.equal(events[0].args._seller, seller, `seller must be ${seller}`)
+    assert.equal(events[0].args._seller, article.seller,
+      `seller must be ${article.seller}`)
 
     assert.equal(events[0].args._name, article.name,
       `article must be ${article.name}`)
@@ -98,10 +98,10 @@ contract('ChainList', async (accounts) => {
     assert.equal(receipt.logs[0].event, 'buyArticleEvent',
       'must be buyArticleEvent')
 
-    const {_id, _seller, _buyer, _name, _price} = receipt.logs[0].args
+    const {_seller, _buyer, _name, _price} = receipt.logs[0].args
 
-    assert.equal(_seller, article.seller, `seller must be ${seller}`)
-    assert.equal(_buyer, article.buyer, `buyer must be ${buyer}`)
+    assert.equal(_seller, article.seller, `seller must be ${article.seller}`)
+    assert.equal(_buyer, article.buyer, `buyer must be ${article.buyer}`)
     assert.equal(_name, article.name, `articleName must be ${article.name}`)
     assert.equal(_price.toNumber(), article.price,
       `articlePrice must be ${article.price}`)
@@ -124,5 +124,4 @@ contract('ChainList', async (accounts) => {
       `but was ${buyerBalanceAfterBuy}`
     )
   })
-
 })
